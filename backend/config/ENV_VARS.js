@@ -1,9 +1,8 @@
-const dotenv = require('dotenv')
+import dotenv from 'dotenv'
 dotenv.config()
 
-const ENV_VARS={
-  PORT:process.env.PORT||5000,
-  MONGO_URL:process.env.MONGO_URL
+ const ENV_VARS = {
+  PORT: process.env.PORT,
+  MONGO_URI: process.env.MONGO_URI
 }
-
-module.exports={ENV_VARS}
+export default ENV_VARS

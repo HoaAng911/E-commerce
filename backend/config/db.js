@@ -1,16 +1,17 @@
-//Tao file config database
-const mongoose = require('mongoose')
-const {ENV_VARS}=require('./ENV_VARS')
+import mongoose from "mongoose";
+import ENV_VARS from "./ENV_VARS.js";
 
-const ConnectDB = async ()=>{
-  try{
-      await mongoose.connect(ENV_VARS.MONGO_URL,{
-        useNewUrlParser:true,
-       useUnifiedTopology:true
-      })
-      console.log('Kết nối MongoDB thành công')
-  }catch(error){
-      throw new Error('Lỗi kết nối MongoDB: '+error.message)
+const ConnectDB = async () => {
+  try {
+    await mongoose.connect(ENV_VARS.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("✅ MongoDB connected");
+  } catch (err) {
+    console.error("❌ Lỗi kết nối MongoDB:", err.message);
+    process.exit(1);
   }
-}
-module.exports ={ConnectDB}
+};
+
+export default ConnectDB;
