@@ -8,4 +8,4 @@ router.get('/getAll',UserController.getAllUser)
 router.get('/getById/:id',UserController.getUserById)
 router.put('/update/:id',UserController.updateUserbyId)
 router.delete('/delete/:id',UserController.deleteUserById)
-export default router 
+export default router
