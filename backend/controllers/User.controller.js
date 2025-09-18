@@ -56,7 +56,7 @@ const UserController = {
   getAllUser: async (req, res) => {
     try {
       const user = await User.find().select('-password')
-      return res.json(user)
+      return res.status(201).json(user)
     } catch (error) {
       return res.status(500).json({ error: error.message })
     }
@@ -67,12 +67,12 @@ const UserController = {
       if (!user) {
         return res.status(400).json({ message: 'Không tìm thấy user' })
       }
-      return res.json(user)
+      return res.status(201).json(user)
     } catch (error) {
       return res.status(500).json({ error: error.message })
     }
   },
-  updateUserbyId: async (req, res) => {
+  updateUserById: async (req, res) => {
     try {
       const { username, password, email } = req.body
       let updateData = { username, password }

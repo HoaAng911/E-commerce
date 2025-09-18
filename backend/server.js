@@ -2,7 +2,7 @@ import express from "express";
 import ENV_VARS from "./config/ENV_VARS.js";
 import ConnectDB from "./config/db.js";
 import userRouter from "./routers/User.route.js";
-
+import productRouter from './routers/Product.route.js'
 const app = express();
 
 // Middleware
@@ -10,7 +10,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/user", userRouter);
-
+app.use("/api/product", productRouter)
 // Start server
 app.listen(ENV_VARS.PORT || 5000, async () => {
   try {

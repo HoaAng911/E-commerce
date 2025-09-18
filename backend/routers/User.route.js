@@ -4,8 +4,8 @@ import UserController from '../controllers/User.controller.js'
 
 router.post('/register',UserController.register)
 router.post('/login',UserController.login)
-router.get('/getAll',UserController.getAllUser)
-router.get('/getById/:id',UserController.getUserById)
-router.put('/update/:id',UserController.updateUserbyId)
-router.delete('/delete/:id',UserController.deleteUserById)
+router.get('/',UserController.getAllUser)
+router.get('/:id',UserController.getUserById)
+router.put('/:id',UserController.updateUserById)
+router.delete('/:id',UserController.deleteUserById)
 export default router
