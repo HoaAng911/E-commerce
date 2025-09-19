@@ -35,10 +35,14 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  isActive: {
+  subCategory: {
+    type: String,
+    default: ""
+  },
+  bestseller: {
     type: Boolean,
-    default: true
-  }
+    default: false
+  },
 }, {
   timestamps: true
 }

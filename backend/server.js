@@ -4,11 +4,14 @@ import ConnectDB from "./config/db.js";
 import userRouter from "./routers/User.route.js";
 import productRouter from './routers/Product.route.js'
 import cartRouter from './routers/Cart.route.js'
+import cors from 'cors'
 const app = express();
 
 // Middleware
 app.use(express.json());
-
+app.use(cors({
+  origin: "http://localhost:5173" 
+}));
 // Routes
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter)
