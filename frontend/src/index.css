@@ -1,1 +1,11 @@
 @import "tailwindcss";
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Prata&display=swap');
+
+@theme {
+  --font-prata: "Prata", serif;
+}
+@theme {
+  --font-outfit: "Outfit", sans-serif;
+}
