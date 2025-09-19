@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import Logo from '../assets/frontend_assets/logo.png'
-import SearchLogo from '../assets/frontend_assets/search_icon.png'
-import UserLogo from '../assets/frontend_assets/profile_icon.png'
-import CartLogo from '../assets/frontend_assets/cart_icon.png'
+import Logo from '../../public/images/logo.png'
+import SearchLogo from '../../public/images/search_icon.png'
+import UserLogo from '../../public/images/profile_icon.png'
+import CartLogo from '../../public/images/cart_icon.png'
 const Navbar = () => {
   const menus = ["HOME", "COLLECTION", "ABOUT", "CONTACT"];
   const [active,setActive]=useState(menus[0])
