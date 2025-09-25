@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import Rating from './Rating'
 import ProductGrid from './ProductGrid'
-const ProductDetail = ({products}) => {
+const ProductDetail = () => {
   const {id} = useParams()
   const [product,setProduct] = useState(null)
     const [relatedProducts, setRelatedProducts] = useState([]);

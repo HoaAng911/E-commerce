@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import ProductDetail from '../src/components/ProductDetail'
+import Collection from './pages/Collection';
 function App() {
   return (
     <Router>
@@ -13,6 +14,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/product/:id" element={<ProductDetail/>}/>
+           <Route path="/collection" element={<Collection/>}/>
         </Routes>
       </Layout>
     </Router>
