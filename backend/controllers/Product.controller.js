@@ -51,7 +51,48 @@ const ProductController = {
     } catch (error) {
       res.status(500).json({ error: error.message })
     }
-  }
+  },
+  BestSeller: async (req, res) => {
+    try {
+      const products = await Product.find({ bestseller: true })
+      if (products.length === 0) {
+        return res.status(404).json({ error: 'Không tìm thấy sản phẩm' })
+      }
+      res.status(200).json(products)
+    } catch (error) {
+      res.status(500).json({ error: error.message })
+    }
+  },
+ getFilteredProducts: async (req, res) => {
+  try {
+    const { category, subCategory, sort } = req.query;
+    const filter = {};
 
+    // Filter category
+    if (category) {
+      const categoryArray = category.split(",");
+      filter.category = { $in: categoryArray }; 
+    }
+
+    // Filter subCategory
+    if (subCategory) {
+      const subCategoryArray = subCategory.split(","); 
+      filter.subCategory = { $in: subCategoryArray };
+    }
+
+    // Query and sort
+    let query = Product.find(filter);
+    if (sort === "low-high") query = query.sort({ price: 1 });
+    if (sort === "high-low") query = query.sort({ price: -1 });
+
+    console.log("req.query:", req.query);
+    console.log("filter:", filter);
+
+    const products = await query;
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
 }
 export default ProductController

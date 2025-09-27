@@ -4,7 +4,7 @@ const UserSchema = new mongoose.Schema({
   username:{
     type:String,
     required:true,
-    unique:true,//Tranh trung username
+    unique:true,
     trim:true
   },
   email:{

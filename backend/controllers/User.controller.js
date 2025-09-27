@@ -2,7 +2,7 @@ import User from '../models/User.model.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
-const SECRET_KEY = process.env.JWT_SECRET
+const SECRET_KEY = process.env.SECRET_KEY
 const UserController = {
 
 
@@ -34,25 +34,32 @@ const UserController = {
       if (!user) {
         return res.status(400).json({ error: 'Sai Email hoặc mật khẩu!' })
       }
+
       const isPasswordValid = await bcrypt.compare(password, user.password)
       if (!isPasswordValid) {
         return res.status(400).json({ error: 'Sai Email hoặc mật khẩu!' })
       }
-      //Tao token
+
+      // Loại bỏ password trước khi gửi về client
+      const { password: pwd, ...userWithoutPassword } = user._doc
+
+      // Tạo token
       const token = jwt.sign(
         { id: user._id, email: user.email },
         SECRET_KEY,
         { expiresIn: '1h' }
       )
+
       return res.json({
         message: 'Đăng nhập thành công',
-        token
+        token,
+        user: userWithoutPassword
       })
-
     } catch (error) {
       res.status(500).json({ error: error.message })
     }
-  },
+  }
+  ,
   getAllUser: async (req, res) => {
     try {
       const user = await User.find().select('-password')
@@ -106,7 +113,28 @@ const UserController = {
     } catch (error) {
       return res.status(500).json({ error: error.message })
     }
+  },
+  getProfile: async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Không có token" });
+    }
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, SECRET_KEY);
+
+    const user = await User.findById(decoded.id).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "Không tìm thấy user" });
+    }
+
+    return res.json(user);
+  } catch (error) {
+    return res.status(401).json({ message: "Token không hợp lệ", error: error.message });
   }
+},
+
 
 }
 
