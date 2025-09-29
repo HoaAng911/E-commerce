@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import useStore from "../store/useCartStore";
+import useUserStore from "../store/useUserStore";
 import { useNavigate } from "react-router-dom";
 
 const AuthForm = () => {
-  const { login, register, user } = useStore();
+  const { login, register, user } = useUserStore();
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ username: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);

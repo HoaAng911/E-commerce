@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useUserCartStore from "../store/useCartStore";
-
+import { Link } from "react-router-dom";
 const Cart = () => {
   const { cart, fetchCart, removeFromCart, updateQuantity } = useUserCartStore();
   const [localCart, setLocalCart] = useState([]);
@@ -125,6 +125,10 @@ const Cart = () => {
             <span>Total</span>
             <span>${total}</span>
           </div>
+          <Link to="/checkout"><div className=" w-full text-end">
+            <button className="bg-black text-white text-sm my-8 px-8 py-3">PROCEED TO CHECKOUT</button>
+          </div></Link>
+         
         </div>
       </div>
     </div>

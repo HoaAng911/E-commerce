@@ -7,11 +7,13 @@ import ProductDetail from '../src/components/ProductDetail';
 import Collection from './pages/Collection';
 import Cart from './pages/Cart';
 import AuthForm from './components/AuthForm';
-import useUserCartStore from './store/useCartStore';
+import useUserStore from './store/useUserStore';
 import UserProfile from './pages/UserProfile';
-
+import CheckoutForm from './pages/CheckoutForm';
+import OrderList from './pages/OrderList';
+import MomoReturn from './pages/MomoReturn';
 function App() {
-  const { user } = useUserCartStore();
+ const { user } = useUserStore()
   
   return (
     <Router>
@@ -24,7 +26,9 @@ function App() {
           <Route path="/collection" element={<Collection />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/login" element={<AuthForm />} />
-
+          <Route path="/checkout" element={<CheckoutForm />} />
+          <Route path="/orderlist" element={<OrderList />} />
+           <Route path="/momo-return" element={<MomoReturn />} />
           {/* Route có điều kiện */}
           <Route
             path="/profile"
