@@ -44,7 +44,6 @@ const CartController = {
           cart.items.push({ productId, quantity, size })
         }
       }
-
       await cart.save()
       res.status(200).json(cart)
     } catch (error) {

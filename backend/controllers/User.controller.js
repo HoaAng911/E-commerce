@@ -1,7 +1,7 @@
 import User from '../models/User.model.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-
+import Address from '../models/Address.model.js'
 const SECRET_KEY = process.env.SECRET_KEY
 const UserController = {
 
@@ -115,28 +115,29 @@ const UserController = {
     }
   },
   getProfile: async (req, res) => {
-  try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ message: "Không có token" });
+    try {
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      // Lấy user (trừ password)
+      const user = await User.findById(req.user.id).select("-password");
+      if (!user) {
+        return res.status(404).json({ message: "User không tồn tại" });
+      }
+
+      // Lấy danh sách địa chỉ của user
+      const addresses = await Address.find({ userId: user._id });
+
+      // Trả về cả user + addresses
+      return res.json({
+        ...user._doc,
+        addresses,
+      });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
     }
-
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, SECRET_KEY);
-
-    const user = await User.findById(decoded.id).select("-password");
-    if (!user) {
-      return res.status(404).json({ message: "Không tìm thấy user" });
-    }
-
-    return res.json(user);
-  } catch (error) {
-    return res.status(401).json({ message: "Token không hợp lệ", error: error.message });
   }
-},
-
-
 }
-
 
 export default UserController

@@ -4,6 +4,8 @@ import ConnectDB from "./config/db.js";
 import userRouter from "./routers/User.route.js";
 import productRouter from './routers/Product.route.js'
 import cartRouter from './routers/Cart.route.js'
+import addressRoute from './routers/Address.route.js'
+import orderRouter from "./routers/Order.router.js";
 import cors from 'cors'
 const app = express();
 
@@ -16,6 +18,8 @@ app.use(cors({
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter)
 app.use("/api/cart", cartRouter)
+app.use("/api/addresses",addressRoute)
+app.use("/api/orders",orderRouter)
 // Start server
 app.listen(ENV_VARS.PORT || 5000, async () => {
   try {
