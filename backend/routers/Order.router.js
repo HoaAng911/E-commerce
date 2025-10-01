@@ -3,7 +3,8 @@ import OrderController from "../controllers/Order.controller.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js"; // giả sử bạn có middleware auth
 
 const router = express.Router();
-
+//
+router.post("/single",authMiddleware,OrderController.createOrderSingle)
 // Tạo order từ giỏ hàng (cần login)
 router.post("/create", authMiddleware, OrderController.createOrderFromCart);
 

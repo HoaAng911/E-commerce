@@ -22,7 +22,7 @@ const OrderController = {
       const { address, phone, paymentMethod } = req.body;
       if (!address || !phone)
         return res.status(400).json({ message: "Address và phone bắt buộc" });
-        console.log("MoMo redirectUrl:", momoConfig.redirectUrl);
+      console.log("MoMo redirectUrl:", momoConfig.redirectUrl);
       // Lấy cart
       const cart = await Cart.findOne({ userId }).populate("items.productId");
       if (!cart || cart.items.length === 0)
@@ -101,7 +101,93 @@ const OrderController = {
       res.status(500).json({ error: error.message });
     }
   },
+  createOrderSingle: async (req, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) return res.status(401).json({ message: "User chưa login" });
 
+      const { productId, quantity, size, address, phone, paymentMethod } = req.body;
+      if (!address || !phone)
+        return res.status(400).json({ message: "Address và phone bắt buộc" });
+
+      // Lấy thông tin sản phẩm
+      const Product = (await import("../models/Product.model.js")).default;
+      const product = await Product.findById(productId);
+      if (!product) return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
+
+      // Tính tổng tiền
+      const total = product.price * quantity;
+
+      // Tạo order
+      const order = new Order({
+        userId,
+        items: [
+          {
+            product: product._id,
+            productName: product.name,
+            quantity,
+            price: product.price,
+            size: size || "",
+            image: product.images?.[0] || ""
+          }
+        ],
+        totalAmount: total,
+        shippingAddress: address,
+        phone,
+        payment: { method: paymentMethod.toLowerCase() || "cod" },
+        status: "pending"
+      });
+      await order.save();
+
+      // Nếu là MoMo
+      if (paymentMethod.toLowerCase() === "momo") {
+        const requestId = order._id.toString() + Date.now();
+        const orderInfo = `Thanh toan san pham ${product.name}`;
+        const rawSignature =
+          `accessKey=${momoConfig.accessKey}&amount=${total}&extraData=&ipnUrl=${momoConfig.ipnUrl}` +
+          `&orderId=${order._id}&orderInfo=${orderInfo}&partnerCode=${momoConfig.partnerCode}` +
+          `&redirectUrl=${momoConfig.redirectUrl}&requestId=${requestId}&requestType=${momoConfig.requestType}`;
+
+        const signature = crypto
+          .createHmac("sha256", momoConfig.secretKey)
+          .update(rawSignature)
+          .digest("hex");
+
+        const requestBody = {
+          partnerCode: momoConfig.partnerCode,
+          accessKey: momoConfig.accessKey,
+          requestId,
+          amount: total.toString(),
+          orderId: order._id.toString(),
+          orderInfo,
+          redirectUrl: momoConfig.redirectUrl,
+          ipnUrl: momoConfig.ipnUrl,
+          extraData: "",
+          requestType: momoConfig.requestType,
+          signature,
+          lang: "vi"
+        };
+
+        const response = await axios.post(
+          "https://test-payment.momo.vn/v2/gateway/api/create",
+          requestBody
+        );
+
+        if (response.data.resultCode !== 0) {
+          return res.status(400).json({ message: "MoMo error", data: response.data });
+        }
+
+        return res.status(201).json({ order, payUrl: response.data.payUrl });
+      }
+
+      // COD → không động vào cart vì đây là mua lẻ
+      res.status(201).json({ order });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+  ,
   getMyOrders: async (req, res) => {
     try {
       const userId = req.user?.id;

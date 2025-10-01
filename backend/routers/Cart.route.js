@@ -6,5 +6,5 @@ router.get('/', authMiddleware,CartController.getCart)
 router.post('/add', authMiddleware,CartController.addToCart)
 router.put('/update',authMiddleware, CartController.updateQuantity)
 router.delete('/remove', authMiddleware,CartController.removeFromCart)
-
+router.delete('/clear', authMiddleware, CartController.clearCart)
 export default router

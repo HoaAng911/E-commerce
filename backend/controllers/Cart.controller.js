@@ -100,7 +100,22 @@ const CartController = {
     } catch (error) {
       res.status(500).json({ error: error.message })
     }
+  },
+  clearCart: async (req, res) => {
+  try {
+    let cart = await Cart.findOne({ userId: req.user.id });
+    if (!cart) {
+      return res.status(400).json({ message: "Giỏ hàng không tồn tại" });
+    }
+
+    cart.items = []; // clear hết sản phẩm
+    await cart.save();
+
+    res.status(200).json({ message: "Đã xóa toàn bộ giỏ hàng" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
+}
 }
 
 export default CartController
