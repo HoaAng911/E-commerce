@@ -6,7 +6,7 @@ import useUserStore from "./useUserStore"; // store user riêng
 const useCartStore = create((set) => ({
   cart: [],
   setCart: (items) => set({ cart: items }),
-  clearCart: () => set({ cart: [] }),
+
   fetchCart: async () => {
     const { token } = useUserStore.getState();
     if (!token) return;
@@ -19,7 +19,6 @@ const useCartStore = create((set) => ({
       console.error("Fetch cart failed:", err.response?.data || err.message);
     }
   },
-
   addToCart: async (productId, quantity = 1, size = "") => {
     const { token } = useUserStore.getState();
     if (!token) return alert("Bạn cần đăng nhập trước khi thêm giỏ hàng!");
@@ -63,6 +62,21 @@ const useCartStore = create((set) => ({
       console.error("Remove from cart failed:", err.response?.data || err.message);
     }
   },
+  clearCart: async () => {
+  const { token } = useUserStore.getState();
+  if (!token) return;
+
+  try {
+    const res = await axios.delete("http://localhost:5000/api/cart/clear", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    set({ cart: [] }); // clear luôn local state
+    console.log(res.data.message); // "Đã xóa toàn bộ giỏ hàng"
+  } catch (err) {
+    console.error("Clear cart failed:", err.response?.data || err.message);
+  }
+},
+
 }));
 
 export default useCartStore;

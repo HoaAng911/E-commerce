@@ -12,6 +12,7 @@ import UserProfile from './pages/UserProfile';
 import CheckoutForm from './pages/CheckoutForm';
 import OrderList from './pages/OrderList';
 import MomoReturn from './pages/MomoReturn';
+import MyOrders from './pages/MyOrder';
 function App() {
  const { user } = useUserStore()
   
@@ -29,6 +30,7 @@ function App() {
           <Route path="/checkout" element={<CheckoutForm />} />
           <Route path="/orderlist" element={<OrderList />} />
            <Route path="/momo-return" element={<MomoReturn />} />
+           <Route path="/my-order" element={<MyOrders />} />
           {/* Route có điều kiện */}
           <Route
             path="/profile"

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
+import useCartStore from "../store/useCartStore"; // ✅ import store
 
 const MomoReturn = () => {
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState("Đang xử lý...");
+  const { clearCart } = useCartStore(); // ✅ lấy hàm clearCart từ store
 
   useEffect(() => {
     const resultCode = searchParams.get("resultCode");
@@ -16,10 +18,11 @@ const MomoReturn = () => {
 
     if (resultCode === "0") {
       setStatus("Thanh toán thành công!");
+      clearCart(); // ✅ xoá giỏ hàng khi thanh toán thành công
     } else {
       setStatus("Thanh toán thất bại!");
     }
-  }, [searchParams]);
+  }, [searchParams, clearCart]);
 
   // Màu sắc theo trạng thái
   const statusColor =
@@ -43,29 +46,17 @@ const MomoReturn = () => {
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           ) : status === "Thanh toán thất bại!" ? (
             <svg
-              className="w-16 h-16 text-red-500 animate-shake"
+              className="w-16 h-16 text-red-500 animate-pulse"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           ) : (
             <svg
@@ -73,23 +64,17 @@ const MomoReturn = () => {
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
             >
-              <circle
-                className="opacity-25"
-                cx={12}
-                cy={12}
-                r={10}
-                strokeWidth={4}
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v8H4z"
-              />
+              <circle className="opacity-25" cx={12} cy={12} r={10} strokeWidth={4} />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
             </svg>
           )}
         </div>
+        <Link to="/">
+          <button className="mt-6 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">
+            Quay về TRANG CHỦ
+          </button>
+        </Link>
       </div>
     </div>
   );

@@ -93,6 +93,14 @@ const Cart = () => {
                     Xóa
                   </button>
                 </div>
+                  <Link
+        to="/checkout"
+        state={{ product: item }}
+      >
+        <button className="bg-black text-white text-xs px-3 py-1 mt-1">
+          Checkout
+        </button>
+      </Link>
               </div>
             
           ))
